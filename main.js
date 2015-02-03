@@ -15,6 +15,33 @@ var width = 422,
 canvas.width = width;
 canvas.height = height;
 
+window.addEventListener("deviceorientation", function (a) {
+   axisHandler(a)
+}, true);
+
+
+
+function axisHandler () {
+    /*player.isMovingRight = false;
+    player.isMovingLeft = false; */
+    gamma = event.gamma;
+    if (event.gamma < -5) {
+        // console.log('left')
+        dir = "left";
+        player.isMovingRight = false;
+        player.isMovingLeft = true;
+    }
+    else if (event.gamma > 5) {
+        dir = "right";
+        player.isMovingRight = true;
+        player.isMovingLeft = false;        
+    }
+    else {
+        player.isMovingRight = false;
+        player.isMovingLeft = false;        
+    }
+}
+
 //Variables for game
 var platforms = [],
   image = document.getElementById("sprite"),
@@ -220,7 +247,7 @@ var Spring = new spring();
 
 function init() {
   //Variables for the game
-  var dir = "left",
+    dir = "left",
     jumpCount = 0;
   
   firstRun = false;
@@ -242,42 +269,43 @@ function init() {
       if (player.vy < -7 && player.vy > -15) player.dir = "right_land";
     }
 
-    //Adding keyboard controls
-    document.onkeydown = function(e) {
-      var key = e.keyCode;
-      
-      if (key == 37) {
-        dir = "left";
-        player.isMovingLeft = true;
-      } else if (key == 39) {
-        dir = "right";
-        player.isMovingRight = true;
-      }
-      
-      if(key == 32) {
-        if(firstRun === true)
-          init();
-        else 
-          reset();
-      }
-    };
+    /*  //Adding keyboard controls
+        document.onkeydown = function(e) {
+          var key = e.keyCode;
+          
+          if (key == 37) {
+            dir = "left";
+            player.isMovingLeft = true;
+          } else if (key == 39) {
+            dir = "right";
+            player.isMovingRight = true;
+          }
+          
+          if(key == 32) {
+            if(firstRun === true)
+              init();
+            else 
+              reset();
+          }
+        };
 
-    document.onkeyup = function(e) {
-      var key = e.keyCode;
-    
-      if (key == 37) {
-        dir = "left";
-        player.isMovingLeft = false;
-      } else if (key == 39) {
-        dir = "right";
-        player.isMovingRight = false;
-      }
-    };
+        document.onkeyup = function(e) {
+          var key = e.keyCode;
+        
+          if (key == 37) {
+            dir = "left";
+            player.isMovingLeft = false;
+          } else if (key == 39) {
+            dir = "right";
+            player.isMovingRight = false;
+          }
+        };
+    */
 
     //Accelerations produces when the user hold the keys
     if (player.isMovingLeft === true) {
       player.x += player.vx;
-      player.vx -= 0.15;
+      player.vx = gamma * 0.1;
     } else {
       player.x += player.vx;
       if (player.vx < 0) player.vx += 0.1;
@@ -285,7 +313,7 @@ function init() {
 
     if (player.isMovingRight === true) {
       player.x += player.vx;
-      player.vx += 0.15;
+      player.vx = gamma * 0.1;
     } else {
       player.x += player.vx;
       if (player.vx > 0) player.vx -= 0.1;
@@ -310,7 +338,7 @@ function init() {
     else if (player.x < 0 - player.width) player.x = width;
 
     //Movement of player affected by gravity
-    if (player.y >= (height / 2) - (player.height / 2)) {
+    if (Math.ceil(player.y) >= (height / 2) - (player.height / 2) - 1) {
       player.y += player.vy;
       player.vy += gravity;
     }
@@ -555,7 +583,7 @@ function playerJump() {
     player.dir = "right";
     if (player.vy < -7 && player.vy > -15) player.dir = "right_land";
   }
-
+/*
   //Adding keyboard controls
   document.onkeydown = function(e) {
     var key = e.keyCode;
@@ -588,24 +616,24 @@ function playerJump() {
       dir = "right";
       player.isMovingRight = false;
     }
-  };
+  };*/
 
-  //Accelerations produces when the user hold the keys
-  if (player.isMovingLeft === true) {
-    player.x += player.vx;
-    player.vx -= 0.15;
-  } else {
-    player.x += player.vx;
-    if (player.vx < 0) player.vx += 0.1;
-  }
+    //Accelerations produces when the user hold the keys
+    if (player.isMovingLeft === true) {
+      player.x += player.vx;
+      player.vx = gamma * 0.1;
+    } else {
+      player.x += player.vx;
+      if (player.vx < 0) player.vx += 0.1;
+    }
 
-  if (player.isMovingRight === true) {
-    player.x += player.vx;
-    player.vx += 0.15;
-  } else {
-    player.x += player.vx;
-    if (player.vx > 0) player.vx -= 0.1;
-  }
+    if (player.isMovingRight === true) {
+      player.x += player.vx;
+      player.vx = gamma * 0.1;
+    } else {
+      player.x += player.vx;
+      if (player.vx > 0) player.vx -= 0.1;
+    }
 
   //Jump the player when it hits the base
   if ((player.y + player.height) > base.y && base.y < height) player.jump();

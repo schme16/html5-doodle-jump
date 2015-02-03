@@ -1,0 +1,38 @@
+{
+    "name": "Pikachu Jump Quest",
+    "description": "A Sample Chrome App",
+    "manifest_version": 2,
+    "minimum_chrome_version": "23",
+/*    "webview": "system",
+*/    "version": "0.0.2",
+    "offline_enabled": true,
+    "icons": {
+        "16": "sys/img/icons/48.png",
+        "36": "sys/img/icons/48.png",
+        "48": "sys/img/icons/48.png",
+        "57": "sys/img/icons/96.png",
+        "72": "sys/img/icons/96.png",
+        "96": "sys/img/icons/96.png",
+        "114": "sys/img/icons/144.png",
+        "128": "sys/img/icons/144.png",
+        "144": "sys/img/icons/144.png",
+        "512": "sys/img/icons/512.png"
+    },
+    "app": {
+        "background": {
+            "scripts": [
+                "sys/js/background.js"
+            ]
+        }
+    },
+    "permissions": [
+        "<all_urls>",
+        "unlimitedStorage"
+    ],
+    "oauth2": {
+        "client_id": "685154638698-spo2uffthl4n123k9j0trco1jdvs0jtt.apps.googleusercontent.com",
+        "scopes": [
+            "https://www.googleapis.com/auth/games"
+        ]
+    }
+}
