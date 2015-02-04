@@ -1,44 +1,33 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Pikachus Jump Quest</title>
-    <link rel="stylesheet" href="style.css">
-
-    <script src="jquery.min.js"></script>
-    <script src="fit-screen.js" data-width="442"></script>
-  </head>
-  <body>
-    <div class="container">
-
-      <canvas id="canvas">
-        Aww, your browser doesn't support HTML5!
-      </canvas>
-
-      <div id="mainMenu">
-        <h1>Pikachus Jump Quest</h1>
-        <a class="button" href="javascript:init()">Play</a>
-      </div>
-
-      <div id="gameOverMenu">
-        <h1>game over!</h1>
-        <h3 id="go_score">you scored 0 points</h3>
-
-        <a class="button" href="javascript:reset()">Restart</a>
-        <a id="tweetBtn" target="_blank" class="button tweet" href="#">Tweet score</a>
-
-        <a id="fbBtn" target="_blank" class="button fb" href="#">Post on FB</a>
-      </div>
-
-      <!-- Preloading image ;) -->
-      <img id="sprite" src="sys/img/assets/2WEhF.png">
-
-      <div id="scoreBoard">
-        <p id="score">0</p>
-      </div>
-
-    </div>
-
-    <script src="main.js"></script>
-  </body>
+	<head>
+		<meta charset="utf-8">
+		<title>Pikachus Jump Quest</title>
+		<link rel="stylesheet" href="style.css">
+		<script src="jquery.min.js"></script>
+		<script src="chance.min.js"></script>
+		<script src="fit-screen.js" data-width="442"></script>
+	</head>
+	<body>
+		<div class="container">
+			<canvas id="canvas"></canvas>
+			<div id="mainMenu">
+				<h1>Pikachus Jump Quest</h1>
+				<a class="button" href="javascript:init()">Play</a>
+			</div>
+			<div id="gameOverMenu">
+				<h1>game over!</h1>
+				<h3 id="go_score">you scored 0 points</h3>
+				<a class="button" href="javascript:reset()">Restart</a>
+				<a id="tweetBtn" target="_blank" class="button tweet" href="#">Tweet score</a>
+				<a id="fbBtn" target="_blank" class="button fb" href="#">Post on FB</a>
+			</div>
+			<!-- Preloading image ;) -->
+			<img id="sprite" src="sys/img/assets/2WEhF.png">
+			<div id="scoreBoard">
+				<p id="score">0</p>
+			</div>
+		</div>
+		<script src="main.js"></script>
+	</body>
 </html>
