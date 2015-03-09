@@ -1,19 +1,23 @@
 // RequestAnimFrame: a browser API for getting smooth animations
-window.requestAnimFrame = (function() {
+window.raf = window.requestAnimFrame = (function() {
     return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
         function(callback) {
             window.setTimeout(callback, 16);
         };
 })();
-
+var running = false;
 var canvas = document.getElementById('canvas'),
+    canvasOnScreen = document.getElementById('canvasOnScreen'),
+    //canvasPlayer = document.getElementById('canvasPlayer'),
     ctx = canvas.getContext('2d');
+    //ctxPlayer = canvasPlayer.getContext('2d');
+    ctxOnScreen = canvasOnScreen.getContext('2d');
 
 var width = 422,
     height = 552;
 
-canvas.width = width;
-canvas.height = height;
+canvas.width = canvas.canvasOnScreen = width;
+canvas.height = canvas.canvasOnScreen = height;
 
 window.addEventListener("deviceorientation", function(a) {
     axisHandler(a)
@@ -65,9 +69,7 @@ var Base = function() {
     this.y = height - this.height;
 
     this.draw = function() {
-        try {
-            ctx.drawImage(image, this.cx, this.cy, this.cwidth, this.cheight, this.x, this.y, this.width, this.height);
-        } catch (e) {}
+        if (running && image.width) ctx.drawImage(image, this.cx, this.cy, this.cwidth, this.cheight, this.x, this.y, this.width, this.height);
     };
 };
 
@@ -98,18 +100,18 @@ var Player = function() {
 
     //Function to draw it
     this.draw = function() {
-        try {
+        //try {
             if (this.dir == "right") this.cy = 121;
             else if (this.dir == "left") this.cy = 201;
             else if (this.dir == "right_land") this.cy = 289;
             else if (this.dir == "left_land") this.cy = 371;
 
-            ctx.drawImage(image, this.cx, this.cy, this.cwidth, this.cheight, this.x, this.y, this.width, this.height);
-        } catch (e) {}
+            if (running && image.width) ctx.drawImage(image, this.cx, this.cy, this.cwidth, this.cheight, this.x, this.y, this.width, this.height);
+        //} catch (e) {}
     };
 
     this.jump = function() {
-        this.vy = -8;
+        this.vy = -7;
     };
 
     this.jumpHigh = function() {
@@ -142,7 +144,7 @@ function Platform() {
 
     //Function to draw it
     this.draw = function() {
-        try {
+        //try {
 
             if (this.type == 1) this.cy = 0;
             else if (this.type == 2) this.cy = 61;
@@ -151,8 +153,8 @@ function Platform() {
             else if (this.type == 4 && this.state === 0) this.cy = 90;
             else if (this.type == 4 && this.state == 1) this.cy = 1000;
 
-            ctx.drawImage(image, this.cx, this.cy, this.cwidth, this.cheight, this.x, this.y, this.width, this.height);
-        } catch (e) {}
+          if (running && image.width) ctx.drawImage(image, this.cx, this.cy, this.cwidth, this.cheight, this.x, this.y, this.width, this.height);
+       // } catch (e) {}
     };
 
     //Platform types
@@ -203,10 +205,12 @@ var Platform_broken_substitute = function() {
     this.appearance = false;
 
     this.draw = function() {
-        try {
-            if (this.appearance === true) ctx.drawImage(image, this.cx, this.cy, this.cwidth, this.cheight, this.x, this.y, this.width, this.height);
+        //try {
+            if (this.appearance === true) {
+                if (running && image.width) ctx.drawImage(image, this.cx, this.cy, this.cwidth, this.cheight, this.x, this.y, this.width, this.height);
+            }
             else return;
-        } catch (e) {}
+        //} catch (e) {}
     };
 };
 
@@ -229,18 +233,20 @@ var spring = function() {
     this.state = 0;
 
     this.draw = function() {
-        try {
+        //try {
             if (this.state === 0) this.cy = 445;
             else if (this.state == 1) this.cy = 501;
 
-            ctx.drawImage(image, this.cx, this.cy, this.cwidth, this.cheight, this.x, this.y, this.width, this.height);
-        } catch (e) {}
+           if (running && image.width) ctx.drawImage(image, this.cx, this.cy, this.cwidth, this.cheight, this.x, this.y, this.width, this.height);
+        //} catch (e) {}
     };
 };
 
 var Spring = new spring();
 
-function init() {
+function init () {
+        running = true;
+
     //Variables for the game
     dir = "left",
         jumpCount = 0;
@@ -250,7 +256,9 @@ function init() {
     //Function for clearing canvas in each consecutive frame
 
     function paintCanvas() {
-        ctx.clearRect(0, 0, width, height);
+        if (running) {
+            ctx.clearRect(0, 0, width, height);
+        }
     }
 
     //Player related calculations and functions
@@ -333,7 +341,7 @@ function init() {
         else if (player.x < 0 - player.width) player.x = width;
 
         //Movement of player affected by gravity
-        if (Math.ceil(player.y) >= (height / 2) - (player.height / 2) - 1) {
+        if (Math.ceil(player.y) >= Math.ceil(height / 2) - Math.ceil(player.height / 2)) {
             player.y += player.vy;
             player.vy += gravity;
         }
@@ -497,9 +505,15 @@ function init() {
     menuLoop = function() {
         return;
     };
+
+    flushToCanvas = function () {
+        ctxOnScreen.drawImage(canvas, 0, 0)
+    }
+
     animloop = function() {
         update();
-        requestAnimFrame(animloop);
+        //raf(flushToCanvas);
+        raf(animloop);
     };
 
     animloop();
@@ -509,6 +523,7 @@ function init() {
 }
 
 function reset() {
+    running = true;
     hideGoMenu();
     showScore();
     player.isDead = false;
@@ -536,13 +551,15 @@ function hideMenu() {
 
 //Shows the game over menu
 function showGoMenu() {
+       running = false;
+
     if(chance.bool({likelihood: 45})) {
-            console.log(11111111111111)
-            AdMob.prepareInterstitial( {adId: 'ca-app-pub-2513539650076209/8185906903', autoShow: true, isTesting: false} );  
-        }
-        else {
-            console.log(222222222222222)
-        }
+        console.log(11111111111111)
+        AdMob.prepareInterstitial( {adId: 'ca-app-pub-2513539650076209/8185906903', autoShow: true, isTesting: false} );  
+    }
+    else {
+        console.log(222222222222222)
+    }
     var menu = document.getElementById("gameOverMenu");
     menu.style.zIndex = 1;
     menu.style.visibility = "visible";
@@ -651,29 +668,19 @@ function playerJump() {
 }
 
 function update() {
-    ctx.clearRect(0, 0, width, height);
+    if (running)  {
+        ctxOnScreen.clearRect(0, 0, width, height);
+        ctx.clearRect(0, 0, width, height);
+    }
     playerJump();
 }
 
 menuLoop = function() {
     update();
-    requestAnimFrame(menuLoop);
+    raf(menuLoop);
 };
 
 menuLoop();
-
-
-
-
-
-admobid = {
-    pubID: 'pub-2513539650076209',
-    interstitial: '',
-    banner: '',
-}
-
-
-
 
 
 
@@ -683,8 +690,6 @@ function initAd () {
     AdMob.prepareInterstitial( {adId: 'ca-app-pub-2513539650076209/8185906903', autoShow: false} );
     AdMob.createBanner({ adId:'ca-app-pub-2513539650076209/2278974101', autoShow:true, isTesting: false });
 }
-
-
 
 function setUpTracking(){
   analytics.setTrackingId('UA-57343816-18', function () {console.log('Analytics Success')}, function () {console.log('Analytics Failure')});
@@ -701,11 +706,12 @@ $(document).on("resume", function () {
   setUpTracking();
 });
 
-$(function deviceReady() {
-  analytics = navigator.analytics;
-  initAd();
-  setUpTracking();
+$(document).on("deviceready", function () {
+    analytics = navigator.analytics;
+    initAd();
+    setUpTracking();
 });
+
 
 
 

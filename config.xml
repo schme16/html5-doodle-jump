@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<widget id="com.gakkle.pikachu-jump-quest" version="0.3.4" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+  <name>Pengu\'s Jump Quest</name>
+  <description>
+        An Ionic Framework and Cordova project.
+    </description>
+  <author email="hi@ionicframework" href="http://ionicframework.com/">
+      Ionic Framework Team
+    </author>
+  <content src="index.html"/>
+  <access origin="*"/>
+  <preference name="webviewbounce" value="false"/>
+  <preference name="UIWebViewBounce" value="false"/>
+  <preference name="DisallowOverscroll" value="true"/>
+  <preference name="BackupWebStorage" value="none"/>
+  <preference name="Fullscreen" value="true"/>
+  <preference name="SplashScreen" value="screen"/>
+  <preference name="SplashScreenDelay" value="3000"/> <!-- this will add 3000 ms delay -->
+  <preference name="AutoHideSplashScreen" value="true"/>
+  
+  <platform name="android">
+
+      <splash src="res/screen/ldpi.png" density="ldpi"/>
+      <splash src="res/screen/mdpi.png" density="mdpi"/>
+      <splash src="res/screen/hdpi.png" density="hdpi"/>
+      <splash src="res/screen/xhdpi.png" density="xhdpi"/>
+      <splash src="res/screen/xxhdpi.png" density="xxhdpi"/>
+      <splash src="res/screen/xxxhdpi.png" density="xxxhdpi"/>
+
+      <icon src="res/icons/48.png" width="48" height="48"/>
+      <icon src="res/icons/72.png" width="72" height="72"/>
+      <icon src="res/icons/96.png" width="96" height="96"/>
+      <icon src="res/icons/144.png" width="144" height="144"/>
+      <icon src="res/icons/192.png" width="192" height="192"/>
+      <icon src="res/icons/512.png" width="512" height="512"/>
+
+
+
+  </platform>  
+  <feature name="StatusBar">
+    <param name="ios-package" value="CDVStatusBar" onload="true"/>
+  </feature>
+</widget>
